@@ -1,0 +1,9 @@
+/.DS_Store
+/.claude
+/.history
+/.venv
+/__pycache__
+/bot.log
+/dime_usd_5m.html
+/signals.csv
+/trades.csv

@@ -1,0 +1,44 @@
+# ============================================================
+#  Session-Based Contrarian Bot — Configuration
+#  Strategy: At each session open, fade the news bias.
+#            Bullish news → SHORT. Bearish news → LONG.
+#            Always in the market.
+# ============================================================
+
+# ── API Keys ────────────────────────────────────────────────
+api_keys:
+  anthropic: "KEY_HERE"
+
+# ── Paradex ─────────────────────────────────────────────────
+paradex:
+  market:    "BTC-USD-PERP"
+  network:   "testnet"           # change to mainnet for live trading
+  size_increment:    0.00001
+  price_tick_size:   0.1
+  min_notional_usd:  10.0
+
+# ── Trading ─────────────────────────────────────────────────
+trading:
+  paper_trading:    true
+  position_size_pct: 0.25        # 25% of balance per trade
+  order_type:       "limit"
+  limit_offset_ticks: 2          # ticks aggressive past mid
+
+# ── Sessions (UTC) ──────────────────────────────────────────
+# Asia:   00:00–08:00 UTC
+# London: 08:00–13:00 UTC
+# NY:     13:00–00:00 UTC
+# Bot evaluates at each open and flips if direction changes
+
+# ── Sentiment ───────────────────────────────────────────────
+sentiment:
+  claude_model:       "claude-sonnet-4-20250514"
+  rss_limit_per_feed: 25          # headlines per RSS feed per session
+  google_news_limit:  50          # Google News headlines per session
+
+# ── Logging ─────────────────────────────────────────────────
+logging:
+  level:      "INFO"
+  log_file:   "bot.log"
+  signal_log: "signals.csv"
+  trade_log:  "trades.csv"
