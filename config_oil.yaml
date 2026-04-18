@@ -1,0 +1,47 @@
+# ============================================================
+#  Brent Crude (BZ-USD) Session-Based Contrarian Bot — Config
+#  Strategy: At each session open, fade the news bias.
+#            Bullish oil news → SHORT. Bearish oil news → LONG.
+#            Geopolitical events filtered for oil impact.
+#            Always in the market.
+# ============================================================
+
+# ── API Keys ────────────────────────────────────────────────
+api_keys:
+  anthropic: "KEY_HERE"
+
+# ── Paradex ─────────────────────────────────────────────────
+# Verify exact market symbol on Paradex: https://app.paradex.trade
+paradex:
+  market:    "BZ-USD-PERP"
+  network:   "testnet"
+  size_increment:    0.01
+  price_tick_size:   0.01
+  min_notional_usd:  10.0
+
+# ── Trading ─────────────────────────────────────────────────
+trading:
+  paper_trading:    true
+  position_size_pct: 0.25        # 25% of balance per trade
+  order_type:       "limit"
+  limit_offset_ticks: 2          # ticks aggressive past mid
+
+# ── Sessions (UTC) ──────────────────────────────────────────
+# Asia:   00:00–08:00 UTC
+# London: 08:00–13:00 UTC  (ICE Brent most active)
+# NY:     13:00–00:00 UTC  (NYMEX active, EIA reports Wed 14:30 UTC)
+# Bot evaluates at each open and flips if direction changes
+
+# ── Sentiment ───────────────────────────────────────────────
+sentiment:
+  claude_model:       "claude-sonnet-4-20250514"
+  rss_limit_per_feed: 25          # headlines per oil RSS feed
+  google_news_limit:  50          # Google News headlines per query
+  geopolitical_rss_limit: 15      # headlines per geopolitical feed (pre-filter)
+
+# ── Logging ─────────────────────────────────────────────────
+logging:
+  level:      "INFO"
+  log_file:   "bot_oil.log"
+  signal_log: "signals_oil.csv"
+  trade_log:  "trades_oil.csv"

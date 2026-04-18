@@ -5,7 +5,10 @@
 /.venv
 /__pycache__
 /bot.log
+/bot_oil.log
 /dime_usd_5m.html
 /signals.csv
+/signals_oil.csv
 /trades.csv
+/trades_oil.csv
 sk-antFIFiw69rx8LUE2Op5zjIZJO7CAk8772wF50FoJOA6seAIMThNvemY8Xf4ptlsvEOUqCoq438AAn9FhOYtL2O4Q-DpGJgwAA

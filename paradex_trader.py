@@ -54,7 +54,7 @@ class PaperTradeBook:
         self.positions[market] = trade
         self.trade_history.append({**trade, "action": "OPEN"})
         log.info(
-            f"[PAPER] OPEN {side} {size:.5f} BTC @ ${price:,.2f} "
+            f"[PAPER] OPEN {side} {size:.5f} {market} @ ${price:,.2f} "
             f"(notional: ${trade['notional_usd']:,.2f}, reason: {open_reason})"
         )
         return trade
@@ -85,7 +85,7 @@ class PaperTradeBook:
         }
         self.trade_history.append(trade)
         log.info(
-            f"[PAPER] CLOSE {side} {size:.5f} BTC @ ${close_price:,.2f} "
+            f"[PAPER] CLOSE {side} {size:.5f} {market} @ ${close_price:,.2f} "
             f"PnL: ${pnl:+.2f} | Total realized: ${self.realized_pnl:+.2f}"
         )
         return trade
@@ -261,7 +261,7 @@ class ParadexTrader:
             f"Order sizing: balance=${balance:,.2f}, "
             f"pct={position_pct:.0%}, "
             f"notional=${notional:,.2f}, "
-            f"size={size:.5f} BTC @ ${price:,.2f}"
+            f"size={size:.5f} {self.market} @ ${price:,.2f}"
         )
         return size
 
