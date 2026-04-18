@@ -23,10 +23,12 @@ Run:
 import argparse
 import csv
 import logging
+import os
 import sys
 import time
 import yaml
 import colorlog
+from dotenv import load_dotenv
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Optional
@@ -143,11 +145,11 @@ def log_trade_to_csv(path: str, trade: dict):
         if not exists:
             writer.writeheader()
         writer.writerow({
-            "timestamp":    trade.get("timestamp", trade.get("close_timestamp","")),
+            "timestamp":    trade.get("close_timestamp", trade.get("timestamp","")),
             "market":       trade.get("market",""),
             "side":         trade.get("side",""),
             "size":         trade.get("size",""),
-            "price":        trade.get("entry_price", trade.get("close_price","")),
+            "price":        trade.get("close_price", trade.get("entry_price","")),
             "notional_usd": round(trade.get("notional_usd",0),2),
             "paper":        trade.get("paper",True),
             "action":       trade.get("action",""),
@@ -245,7 +247,7 @@ def evaluate_and_trade(trader: ParadexTrader, cfg: dict,
             trade_res = trader.open_long(open_reason=f"{label}_session")
 
     if trade_res:
-        log_trade_to_csv(cfg["logging"]["trade_log"], trade_res)
+        log_trade_to_csv(cfg["logging"]["trade_log"], {**trade_res, "action": action})
 
     # 4. Status
     status  = trader.status_report()
@@ -287,6 +289,8 @@ def main():
         print(f"Config not found: {config_path}")
         sys.exit(1)
 
+    load_dotenv()
+
     with open(config_path) as f:
         cfg = yaml.safe_load(f)
 
@@ -296,8 +300,12 @@ def main():
     global log
     log = setup_logging(cfg)
 
+    env_key = os.getenv("ANTHROPIC_API_KEY")
+    if env_key:
+        cfg["api_keys"]["anthropic"] = env_key
+
     if cfg["api_keys"]["anthropic"].startswith("YOUR_"):
-        log.error("Set your Anthropic API key in config.yaml")
+        log.error("Set your Anthropic API key in config.yaml or .env")
         sys.exit(1)
 
     paper = cfg["trading"]["paper_trading"]
